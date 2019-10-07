@@ -9,7 +9,6 @@ env:
     - STATE=mariadb.ci,mariadb
   matrix:
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/default --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/5.5 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.1 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.2 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3 --file-root=$PWD"
