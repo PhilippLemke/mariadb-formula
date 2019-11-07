@@ -5,6 +5,12 @@ include:
 {%- set mysql_root_password = salt['pillar.get']('mariadb:server:root_password', salt['grains.get']('server_id')) %}
 
 {%- if mysql_root_password and os_family == 'Debian' %}
+# Required to be able to do debconf.set
+debconf-utils:
+  pkg.installed:
+    - require_in:
+      - debconf: mysql_debconf
+
 mysql_debconf:
   debconf.set:
     - name: mysql-server

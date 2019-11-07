@@ -6,18 +6,18 @@ env:
   global:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
-    - STATE=mariadb
+    - STATE=mariadb.ci,mariadb
   matrix:
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/default --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.1 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.2 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3 --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3.13 --file-root=$PWD"
+    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3.18 --file-root=$PWD"
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.4 --file-root=$PWD"
 
 before_install:
   - sudo apt-get update
-  - curl -L http://bootstrap.saltstack.org | sudo -E sh -s -- stable
+  - curl -L http://bootstrap.saltstack.org | sudo -E sh -s -- stable 2019.2.0
   # Cleanup Travis' MySQL leftovers as they conflict with the MariaDB clean install
   - sudo apt-get purge mysql-common mysql-server mysql-client
   - sudo rm /etc/mysql /var/lib/mysql /var/log/mysql -rf
