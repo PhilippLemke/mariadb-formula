@@ -1,23 +1,38 @@
 language: python
-python:
-- '2.7'
+dist: bionic
 
 env:
   global:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
     - STATE=mariadb.ci,mariadb
-  matrix:
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/default --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.1 --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.2 --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3 --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3.18 --file-root=$PWD"
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.4 --file-root=$PWD"
+
+matrix:
+  include:
+    - python: 3.7
+      env: PYTHONVERSION=python3.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.1 --file-root=$PWD"
+    - python: 3.7
+      env: PYTHONVERSION=python3.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.2 --file-root=$PWD"
+    - python: 3.7
+      env: PYTHONVERSION=python3.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3 --file-root=$PWD"
+    - python: 3.7
+      env: PYTHONVERSION=python3.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3.20 --file-root=$PWD"
+    - python: 3.7
+      env: PYTHONVERSION=python3.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.4 --file-root=$PWD"
+    - python: 2.7
+      env: PYTHONVERSION=python2.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.1 --file-root=$PWD"
+    - python: 2.7
+      env: PYTHONVERSION=python2.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.2 --file-root=$PWD"
+    - python: 2.7
+      env: PYTHONVERSION=python2.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3 --file-root=$PWD"
+    - python: 2.7
+      env: PYTHONVERSION=python2.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.3.20 --file-root=$PWD"
+    - python: 2.7
+      env: PYTHONVERSION=python2.7 SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=.salt/pillar/10.4 --file-root=$PWD"      
 
 before_install:
   - sudo apt-get update
-  - curl -L http://bootstrap.saltstack.org | sudo -E sh -s -- stable 2019.2.0
+  - curl -L http://bootstrap.saltstack.org | sudo -E sh -s -- -x ${PYTHONVERSION} stable
   # Cleanup Travis' MySQL leftovers as they conflict with the MariaDB clean install
   - sudo apt-get purge mysql-common mysql-server mysql-client
   - sudo rm /etc/mysql /var/lib/mysql /var/log/mysql -rf
